@@ -28,8 +28,4 @@ public class HomeController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/content")
-	public String content() {
-		return "content";
-	}
 }

@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{base}">
+<head>
+<title>Contacts Controller</title>
+</head>
+<body>
+	<section class="starter-template" layout:fragment="content">
+		<p th:each="smokeTest : ${contactList}"
+			th:text="${smokeTest.account.name}"></p>
+	</section>
+</body>
+</html>

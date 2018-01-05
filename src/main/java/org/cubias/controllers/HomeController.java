@@ -33,7 +33,7 @@ public class HomeController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "contacts", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/contacts", method = RequestMethod.GET)
 	public ModelAndView contractsIndex() {
 		ModelAndView modelAndView = new ModelAndView("contract_list");
 		modelAndView.addObject("contactList", contactsRepository.getAll());
@@ -44,5 +44,10 @@ public class HomeController {
 	public ModelAndView login() {
 		ModelAndView modelAndView = new ModelAndView("login");
 		return modelAndView;
+	}
+
+	@RequestMapping(value = "403", method = RequestMethod.GET)
+	public String error403() {
+		return "/error/403";
 	}
 }

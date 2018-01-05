@@ -1,17 +1,25 @@
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{base}">
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 <title>Contacts Controller</title>
 </head>
 <body>
-	<section class="starter-template" layout:fragment="content">
-		<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-		<form th:action="@{/logout}" method="post">
-			<input type="submit" value="Sign Out" />
-		</form>
-		<p th:each="smokeTest : ${contactList}"
-			th:text="${smokeTest.account.name + ' :: '+ smokeTest.FirstName}"></p>
-	</section>
+	<div th:replace="fragments/header :: header-css"></div>
+	<div th:replace="fragments/header :: header"></div>
+	<div class="container">
+		<span sec:authentication="name">...</span> <span
+			th:text="${#authorization.expression('isAuthenticated()')} ? 
+               'the user is logged in' : 
+               'the user is NOT logged in'">
+		</span>
+		<section class="starter-template">
+			<h1>Admin page (Spring Security protected)</h1>
+			<h2 th:inline="text">Hello
+				[[${#httpServletRequest.remoteUser}]]!</h2>
+			<p th:each="smokeTest : ${contactList}"
+				th:text="${smokeTest.account.name + ' :: '+ smokeTest.FirstName}"></p>
+		</section>
+	</div>
+	<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

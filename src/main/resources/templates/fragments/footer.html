@@ -1,0 +1,23 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+	<div th:fragment="footer">
+		<div class="container">
+			<footer>
+				<!-- this is footer -->
+				© 2018 cubias.org <span sec:authorize="isAuthenticated()"> |
+					Logged user: <span sec:authentication="name"></span> | Roles: <span
+					sec:authentication="principal.authorities"></span>
+				</span>
+				<script type="text/javascript"
+					src="/McBoot/webjars/jquery/3.2.1/jquery.min.js"></script>
+				<script type="text/javascript"
+					src="/McBoot/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+			</footer>
+		</div>
+	</div>
+</body>
+</html>

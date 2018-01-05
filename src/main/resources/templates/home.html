@@ -1,16 +1,17 @@
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{base}">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Home Controller</title>
 </head>
 <body>
-	<section class="starter-template" layout:fragment="content">
+	<div th:replace="fragments/header :: header-css"></div>
+	<div th:replace="fragments/header :: header"></div>
+	<div class="container">
 		<h1>Spring Boot Web Thymeleaf Example</h1>
 		<h2>
 			<span th:text="'Message: ' + ${message}"></span>
 		</h2>
-	</section>
-	<h3>McBoot</h3>
+		<h3>McBoot</h3>
+	</div>	
+	<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

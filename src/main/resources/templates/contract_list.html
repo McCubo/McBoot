@@ -6,8 +6,12 @@
 </head>
 <body>
 	<section class="starter-template" layout:fragment="content">
+		<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out" />
+		</form>
 		<p th:each="smokeTest : ${contactList}"
-			th:text="${smokeTest.account.name}"></p>
+			th:text="${smokeTest.account.name + ' :: '+ smokeTest.FirstName}"></p>
 	</section>
 </body>
 </html>

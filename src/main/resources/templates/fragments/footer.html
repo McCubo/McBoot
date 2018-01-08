@@ -11,6 +11,7 @@
 				© 2018 cubias.org <span sec:authorize="isAuthenticated()"> |
 					Logged user: <span sec:authentication="name"></span> | Roles: <span
 					sec:authentication="principal.authorities"></span>
+					<span th:text="${@environment.getProperty('server.context-path')}">...</span>
 				</span>
 				<script type="text/javascript"
 					src="/McBoot/webjars/jquery/3.2.1/jquery.min.js"></script>

@@ -4,21 +4,32 @@
 <head>
 </head>
 <body>
-	<div th:fragment="footer">
-		<div class="container">
-			<footer>
-				<!-- this is footer -->
-				© 2018 cubias.org <span sec:authorize="isAuthenticated()"> |
-					Logged user: <span sec:authentication="name"></span> | Roles: <span
-					sec:authentication="principal.authorities"></span>
-					<span th:text="${@environment.getProperty('server.context-path')}">...</span>
-				</span>
-				<script type="text/javascript"
-					src="/McBoot/webjars/jquery/3.2.1/jquery.min.js"></script>
-				<script type="text/javascript"
-					src="/McBoot/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-			</footer>
+	<div th:fragment="footer" id="footer">
+		<div id="footer-content">
+			<div class="footer-logo"></div>
+			<div id="footer-left">
+				<div class="grid_main">
+					<!--?php print $start;?-->
+					©
+					<!--? print date('Y'); ?-->
+					- Developed by TELUS International - Information Services
+				</div>
+			</div>
 		</div>
+	</div>
+
+	<div th:fragment="jscripts">
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<script th:src="@{/js/include/jquery.ui.touch-punch.min.js}"></script>
+		<script th:src="@{/js/include/jquery.jgrowl.min.js}"></script>		
+		<!-- REQUIRED: Functional Widgets -->
+		<script th:src="@{/js/include/mobiledevices.min.js}"></script>
+		<!-- DISABLED (only needed for IE7 <script th:src="@{/js/include/json2.js"></script> -->
+		<!-- REQUIRED: Bootstrap engine -->
+		<script th:src="@{/js/include/bootstrap.min.js}"></script>
+		<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.16/datatables.min.js"></script>
 	</div>
 </body>
 </html>

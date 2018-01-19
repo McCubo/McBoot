@@ -1,34 +1,107 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head>
+<head th:fragment="css">
+<meta charset="utf-8"></meta>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+
+<title>Force.com Writeback</title>
+<meta name="description" content=""></meta>
+<meta name="author" content="McCubo"></meta>
+
+<!-- http://davidbcalhoun.com/2010/viewport-metatag -->
+<meta name="HandheldFriendly" content="True"></meta>
+<meta name="MobileOptimized" content="320"></meta>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
+
+<link rel="stylesheet" th:href="@{/css/datepicker.css?v=1}"></link>
+<!-- full calander css -->
+<link rel="stylesheet" th:href="@{/css/fullcalendar.css?v=1}"></link>
+<!-- data tables extended CSS -->
+<link rel="stylesheet" th:href="@{/css/TableTools.css?v=1}"></link>
+<!-- bootstrap wysimhtml5 editor -->
+<link rel="stylesheet" th:href="@{/css/bootstrap-wysihtml5.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/wysiwyg-color.css}"></link>
+<!-- custom/responsive growl messages -->
+<link rel="stylesheet" th:href="@{/css/toastr.custom.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/toastr-responsive.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/jquery.jgrowl.css?v=1}"></link>
+
+<!-- // DO NOT REMOVE OR CHANGE ORDER OF THE FOLLOWING // -->
+<!-- bootstrap default css (DO NOT REMOVE) -->
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"></link>
+<!--<link rel="stylesheet" th:href="@{/css/bootstrap-responsive.min.css?v=1">-->
+<!-- font awsome and custom icons -->
+<link rel="stylesheet" th:href="@{/css/font-awesome.min.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/cus-icons.css?v=1}"></link>
+<!-- jarvis widget css -->
+<link rel="stylesheet" th:href="@{/css/jarvis-widgets.css?v=1}"></link>
+<!-- Data tables, normal tables and responsive tables css -->
+<link rel="stylesheet" th:href="@{/css/DT_bootstrap.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/responsive-tables.css?v=1}"></link>
+<!-- used where radio, select and form elements are used -->
+<link rel="stylesheet" th:href="@{/css/uniform.default.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/select2.css?v=1}"></link>
+<!-- main theme files -->
+
+<link rel="stylesheet" th:href="@{/css/theme.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/theme-responsive.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/telus_style.css?v=1}"></link>
+<link rel="stylesheet" th:href="@{/css/jquery.autocomplete.css?v=1}"></link>
+
+
+<!-- // THEME CSS changed by javascript: the CSS link below will override the rules above // -->
+<!-- For more information, please see the documentation for "THEMES" -->
+<link rel="stylesheet" id="switch-theme-js"
+	th:href="@{/css/themes/default.css?v=1}"></link>
+
+<!-- To switch to full width -->
+<link rel="stylesheet" id="switch-width"
+	th:href="@{/css/full-width.css?v=1}"></link>
+
+<!-- Webfonts -->
+<link rel='stylesheet'
+	href='http://fonts.googleapis.com/css?family=Lato:300,400,700'
+	type='text/css'></link>
+
+<link th:href="@{/css/multi-select.css}" media="screen" rel="stylesheet"
+	type="text/css"></link>
 </head>
 <body>
-	<div th:fragment="header-css">
-		<!-- this is header-css -->
-		<link rel="stylesheet" type="text/css"
-			href="/McBoot/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
-
-		<link rel="stylesheet" th:href="@{/css/main.css}"
-			href="../../css/main.css" />
-	</div>
-	<div th:fragment="header">
-		<!-- this is header -->
-		<nav class="navbar navbar-inverse">
-			<div class="container">
-				<div class="navbar-header">
-					<a class="navbar-brand" th:href="@{/}">Spring McBoot</a>
-				</div>
-				<div id="navbar" class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li class="active"><a th:href="@{/}">Home</a></li>
-						<li sec:authorize="hasRole('ADMIN')"><a
-							th:href="@{/admin/contacts}">Contact List</a></li>
-						<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Sign
-								Out</a></li>
-					</ul>
-				</div>
+	<header th:fragment="hlogo" class="header-wrap">
+		<div class="contained">
+			<div id="logos">
+				<div id="logo"></div>
 			</div>
-		</nav>
-	</div>
+			<h1 id="application_name">Salesforce Writeback</h1>
+		</div>
+	</header>
+
+	<aside th:fragment="aside">
+		<!-- aside item: Mini profile -->
+		<div class="my-profile">
+			<a href="javascript:void(0)" class="my-profile-pic"> <img
+				th:src="@{/img/avatar/McAvatar.png}" alt="PIC"></img>
+			</a><span class="first-child">Welcome <strong
+				sec:authentication="name">aduser.name</strong></span> <span>Role: <a
+				href="#" sec:authentication="principal.authorities">AUTH NAME</a>
+			</span>
+
+		</div>
+		<div class="divider"></div>
+		<!-- end aside item: Mini profile -->
+
+		<!-- aside item: Menu -->
+		<div class="sidebar-nav-fixed">
+			<ul class="menu" id="accordion-menu-js">
+				<li class="current"><a th:href="@{'/'}"><i class="icon-th"></i>
+						Salesforce Catalogs</a></li>
+				<li sec:authorize="hasAuthority('ADMIN')" class=""><a href=""><i
+						class="icon-user"></i>Admin Users</a></li>
+				<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}"><i
+						class="icon-off"></i>Sign Out</a></li>
+			</ul>
+		</div>
+	</aside>
 </body>
 </html>

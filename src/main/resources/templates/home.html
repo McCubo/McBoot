@@ -1,17 +1,57 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>Home Controller</title>
+<head th:include="fragments/header :: css">
+
 </head>
+
 <body>
-	<div th:replace="fragments/header :: header-css"></div>
-	<div th:replace="fragments/header :: header"></div>
-	<div class="container">
-		<h1>Spring Boot Web Thymeleaf Example</h1>
-		<h2>
-			<span th:text="'Message: ' + ${message}"></span>
-		</h2>
-		<h3>McBoot</h3>
-	</div>	
+	<!-- .height-wrapper -->
+	<div class="height-wrapper">
+		<!-- header -->
+		<header th:replace="fragments/header :: hlogo"></header>
+		<div id="main" role="main" class="container-fluid">
+			<div class="contained">
+				<aside th:replace="fragments/header :: aside"></aside>
+				<!-- main content -->
+				<div id="page-content">
+					<h1 id="page-header">Records ready to edition</h1>
+					<div class="fluid-container">
+						<article class="col-md-12 sortable-grid ui-sortable">
+							<div class="jarviswidget jarviswidget-sortable" id="widget-id-2"
+								role="widget" style="">
+
+
+								<!-- widget div-->
+								<div role="content">
+									<div class="inner-spacer widget-content-padding">
+										<!-- content -->
+										<ul id="myTab" class="nav nav-tabs default-tabs">
+											<li class="active"><a href="#s1" data-toggle="tab">TI
+													Contracts</a></li>
+											<li><a href="#s2" data-toggle="tab">Account Mapping</a></li>
+										</ul>
+										<div id="myTabContent" class="tab-content">
+											<div class="tab-pane fade in active" id="s1">
+												<div th:include="fragments/ti_contract :: table"></div>
+											</div>
+											<div class="tab-pane fade" id="s2">
+												<div th:include="fragments/ti_account_mapping :: table"></div>
+											</div>
+										</div>
+										<!-- end content -->
+									</div>
+								</div>
+								<!-- end widget div -->
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/footer :: jscripts"></div>
+	<div th:replace="fragments/ti_contract :: jscript"></div>
+	<div th:replace="fragments/ti_account_mapping :: jscript"></div>
 </body>
 </html>

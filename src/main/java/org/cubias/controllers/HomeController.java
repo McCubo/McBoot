@@ -1,10 +1,9 @@
 package org.cubias.controllers;
 
-import java.util.Map;
-
 import org.cubias.repositories.ContactsRepository;
+import org.cubias.repositories.ForceAccountMappingRepository;
+import org.cubias.repositories.ForceContractsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,29 +13,27 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/")
 public class HomeController {
 
-	@Value("${home.message}")
-	private String message;
-
 	@Autowired
 	private ContactsRepository contactsRepository;
 
-	@RequestMapping("/")
-	public String home(Map<String, Object> model) {
-		model.put("message", this.message);
-		return "home";
-	}
+	@Autowired
+	private ForceContractsRepository contractsRepository;
 
-	@RequestMapping(value = "mav", method = RequestMethod.GET)
+	@Autowired
+	private ForceAccountMappingRepository accountMapRepository;
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView modelAndView = new ModelAndView("home");
-		modelAndView.addObject("message", "Model And View approach");
+		modelAndView.addObject("accountMapList", accountMapRepository.getAll());
+		modelAndView.addObject("contract_list", contractsRepository.getall());
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/admin/contacts", method = RequestMethod.GET)
 	public ModelAndView contractsIndex() {
-		ModelAndView modelAndView = new ModelAndView("contract_list");
-		modelAndView.addObject("contactList", contactsRepository.getAll());
+		ModelAndView modelAndView = new ModelAndView("contract_list");		
+		modelAndView.addObject("contactList", contactsRepository.getAll());		
 		return modelAndView;
 	}
 

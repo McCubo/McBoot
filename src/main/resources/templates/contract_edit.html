@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: css">
+
+</head>
+
+<body>
+	<!-- .height-wrapper -->
+	<div class="height-wrapper">
+		<!-- header -->
+		<header th:replace="fragments/header :: hlogo"></header>
+		<div id="main" role="main" class="container-fluid">
+			<div class="contained">
+				<aside th:replace="fragments/header :: aside"></aside>
+				<!-- main content -->
+				<div id="page-content">
+					<h1 id="page-header">
+						Editing TI Contract :: <strong th:text="${contract.id}"></strong>
+					</h1>
+					<form class="form-horizontal themed"
+						th:action="@{/editor/save/contract}" id="contract_form_edit">
+						<fieldset>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>TI Contract Name: </label>
+									</div>
+									<div class="col-md-3">
+										<input id="id" type="hidden" th:value="${contract.id}"
+											disabled="disabled" name="id"></input> <input type="text"
+											class="form-control" disabled="disabled"
+											th:value="${contract.contactName}"></input>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-3">
+										<label>Types of Work: </label>
+									</div>
+									<div class="col-md-3">
+										<select multiple="multiple" id="tow-select" name="tow-select">
+											<option th:each="tow : ${contract.typeOfWork}"
+												th:value="${tow.optionName}" th:text="${tow.optionName}"
+												th:selected="${tow.selected}"></option>
+										</select>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-3">
+										<label>Channel Type: </label>
+									</div>
+									<div class="col-md-3">
+										<select multiple="multiple" id="ct-select" name="ct-select">
+											<option th:each="ct : ${contract.channelType}"
+												th:value="${ct.optionName}" th:text="${ct.optionName}"
+												th:selected="${ct.selected}"></option>
+										</select>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-3">
+										<label>Channel Type: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="number" id="tm_headcount"
+											th:value="${contract.teamMemberCount}" class="form-control"></input>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-actions">
+								<button type="reset" class="btn medium btn-danger">
+									Cancel</button>
+								<button type="submit" class="btn medium btn-primary"
+									id="edit_contract">Save changes</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<br />
+	<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/footer :: jscripts"></div>
+	<script th:src="@{/js/libs/jquery.multi-select.js}"
+		type="text/javascript"></script>
+	<script>
+		$(document).ready(function() {
+			$('#tow-select').multiSelect();
+			$("#ct-select").multiSelect();
+			$("form#contract_form_edit").submit(function() {
+				$("#edit_contract").prop('disabled', true);
+				var oForm = {
+					"id" : $("#id").val(),
+					"typeOfWork" : $("#tow-select").val(),
+					"channelType" : $("#ct-select").val(),
+					"teamMemberCount" : $("#tm_headcount").val()
+				};
+				console.log(JSON.stringify(oForm));
+				$.ajax({
+					type : "post",
+					contentType : "application/json",
+					url : $("#contract_form_edit").attr("action"),
+					data : JSON.stringify(oForm),
+					dataType : "json",
+					success : function(data) {
+						$("#edit_contract").prop('disabled', false);
+						data.errorList.forEach(function(element){
+							$.jGrowl(element, { 
+								header: 'Error', 
+								sticky: false,
+								life: 5000,
+								speed: 500,
+								theme: 'with-icon',
+								easing: 'easeOutBack',
+								animateOpen: { 
+									height: "show"
+								},
+								animateClose: { 
+									opacity: 'hide' 
+								}
+							});	
+						});
+						if (data.errorList.length == 0) {
+							$.jGrowl("The record was successfully updated", { 
+								header: 'Success!', 
+								sticky: false,
+								life: 5000,
+								speed: 500,
+								theme: 'with-icon',
+								easing: 'easeOutBack',
+								animateOpen: { 
+									height: "show"
+								},
+								animateClose: { 
+									opacity: 'hide' 
+								}
+							});								
+						}
+					}
+				});
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>

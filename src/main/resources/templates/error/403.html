@@ -1,18 +1,40 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" class="no-right-bar no-left-bar error-page"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Error 403 - Forbidden</title>
+<meta charset="utf-8"></meta>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+<title>Force.com Writeback</title>
+<meta name="description" content=""></meta>
+<meta name="author" content=""></meta>
+<meta name="HandheldFriendly" content="True"></meta>
+<meta name="MobileOptimized" content="320"></meta>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"></meta>
+<link rel="stylesheet" th:href="@{css/bootstrap.min.css?v=1}" />
+<link rel="stylesheet" th:href="@{css/font-awesome.min.css?v=1}" />
+<link rel="stylesheet" th:href="@{css/theme.css?v=1}" />
+<link rel="stylesheet" th:href="@{css/telus_style.css?v=1}" />
+<link rel="shortcut icon" th:href="@{img/favicons/favicon.png}" />
+<link rel="shortcut icon" th:href="@{img/favicons/favicon.ico}" />
 </head>
 <body>
-	<div th:replace="fragments/header :: header-css"></div>
-	<div th:replace="fragments/header :: header"></div>
-	<div class="container">
-		<h1>403 - Access is denied</h1>
-		<div th:inline="text">Hello
-			'[[${#httpServletRequest.remoteUser}]]', you do not have permission
-			to access this page.</div>
+	<!-- .height-wrapper -->
+	<div class="height-wrapper">
+		<div id="main" role="main" class="container-fluid">
+			<div class="contained">
+				<!-- main content -->
+				<div id="page-content">
+					<!-- page header -->
+					<h1 class="dimention">
+						<i class="icon-eye-close"></i> 403 - Access denied
+					</h1>
+					<h3 th:inline="text">Hello '[[${#httpServletRequest.remoteUser}]]', you do not
+						have permission to access this page.</h3>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

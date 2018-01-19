@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: css">
+
+</head>
+
+<body>
+	<!-- .height-wrapper -->
+	<div class="height-wrapper">
+		<!-- header -->
+		<header th:replace="fragments/header :: hlogo"></header>
+		<div id="main" role="main" class="container-fluid">
+			<div class="contained">
+				<aside th:replace="fragments/header :: aside"></aside>
+				<!-- main content -->
+				<div id="page-content">
+					<h1 id="page-header">
+						Editing Account Mapping :: <strong th:text="${accountMap.id}"></strong>
+					</h1>
+					<form class="form-horizontal themed"
+						th:action="@{/editor/save/acc_map}" id="am_form_edit">
+						<fieldset>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>Client Name: </label>
+									</div>
+									<div class="col-md-3">
+										<input id="id" type="hidden" th:value="${accountMap.id}"
+											disabled="disabled"></input> <input type="text"
+											class="form-control" disabled="disabled"
+											th:value="${accountMap.Client__c}"></input>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>Business Unit Name: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="text" class="form-control" disabled="disabled"
+											th:value="${accountMap.Business_Unit__c}"></input>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>TI Director: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="text" class="form-control" required="required"
+											maxlength="255" min="5"
+											th:value="${accountMap.TI_Director__c}" name="am_ti_director"
+											id="am_ti_director"></input>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>Program: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="text" class="form-control" required="required"
+											maxlength="255" min="5" th:value="${accountMap.Program__c}"
+											name="am_program" id="am_program"></input>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>Start Date: </label>
+									</div>
+									<div class="col-md-3">
+										<div class="input-append date" id="am_start_date">
+										<input class="datepicker-input" size="20" type="text"
+												th:value="${accountMap.Start_Date__c}"
+												readonly="readonly" id="am_startdate_tx"></input>
+											<!-- <input class="datepicker-input" size="20" type="text"
+												th:value="${#dates.format(accountMap.Start_Date__c, 'MM/dd/YYYY')}"
+												readonly="readonly" id="am_startdate_tx"></input> --> <span
+												class="add-on"><i class="cus-calendar-2"></i></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>Status: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="text" class="form-control" disabled="disabled"
+											maxlength="255" min="5" th:value="${accountMap.Status__c}"
+											name="am_status" id="am_status"></input>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<button type="reset" class="btn medium btn-danger">
+									Cancel</button>
+								<button type="button" class="btn medium btn-primary"
+									id="edit_am">Save changes</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<br />
+	<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/footer :: jscripts"></div>
+	<script th:src="@{/js/include/jquery.fullcalendar.min.js}"></script>
+	<script th:src="@{/js/include/bootstrap-datepicker.min.js}"></script>
+	<script>
+		$(document).ready(function() {
+			$("#am_start_date").datepicker({
+				format : "yyyy-mm-dd"
+			});
+
+			$("#edit_am").click(function(event) {
+				$("#edit_am").prop('disabled', true);
+				var oForm = {
+					"id" : $("#id").val(),
+					"director" : $("#am_ti_director").val(),
+					"program" : $("#am_program").val(),
+					"startdate" : $("#am_startdate_tx").val()
+				};
+				console.log(JSON.stringify(oForm));
+				$.ajax({
+					type : "post",
+					contentType : "application/json",
+					url : $("#am_form_edit").attr("action"),
+					data : JSON.stringify(oForm),
+					dataType : 'json',
+					success : function(data) {
+						console.log(data);
+						$("#edit_am").prop('disabled', false);
+						data.errorList.forEach(function(element){
+							$.jGrowl(element, { 
+								header: 'Error', 
+								sticky: false,
+								life: 5000,
+								speed: 500,
+								theme: 'with-icon',
+								easing: 'easeOutBack',
+								animateOpen: { 
+									height: "show"
+								},
+								animateClose: { 
+									opacity: 'hide' 
+								}
+							});	
+						});
+						if (data.errorList.length == 0) {
+							$.jGrowl("The record was successfully updated", { 
+								header: 'Success!', 
+								sticky: false,
+								life: 5000,
+								speed: 500,
+								theme: 'with-icon',
+								easing: 'easeOutBack',
+								animateOpen: { 
+									height: "show"
+								},
+								animateClose: { 
+									opacity: 'hide' 
+								}
+							});								
+						}
+					}
+				});
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>

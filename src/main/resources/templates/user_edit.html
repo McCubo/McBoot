@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: css">
+
+</head>
+
+<body>
+	<!-- .height-wrapper -->
+	<div class="height-wrapper">
+		<!-- header -->
+		<header th:replace="fragments/header :: hlogo"></header>
+		<div id="main" role="main" class="container-fluid">
+			<div class="contained">
+				<aside th:replace="fragments/header :: aside(isUser=true)"></aside>
+				<!-- main content -->
+				<div id="page-content">
+					<h1 id="page-header">
+						Editing application user :: <strong th:text="${user.useAdUser}"></strong>
+					</h1>
+					<form class="form-horizontal themed"
+						th:action="@{/admin/save/user}" id="user_form_edit" method="post">
+						<fieldset>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>Workday ID: </label>
+									</div>
+									<div class="col-md-3">
+										<input id="id" type="hidden" th:value="${user.useId}"
+											disabled="disabled" name="id"></input> <input type="text"
+											class="form-control" disabled="disabled"
+											th:value="${user.useWdId}"></input>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<label>Inserted Date: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="text" disabled="disabled"
+											th:value="${user.useInsertedDate}" class="form-control"></input>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<label>Writeback Role: </label>
+									</div>
+									<div class="col-md-3">
+										<select id="use_role_id" class="form-control">
+											<option th:each="role : ${roleList}"
+												th:text="${#strings.capitalize(#strings.toLowerCase(role.rolName))}"
+												th:selected="${role.rolId == user.useRole.rolId}"
+												th:value="${role.rolId}"></option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<button type="reset" class="btn medium btn-danger">
+									Cancel</button>
+								<button type="submit" class="btn medium btn-primary"
+									id="edit_user">Save changes</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<br />
+	<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/footer :: jscripts"></div>
+	<script>
+		$(document).ready(function() {
+			$("form#user_form_edit").submit(function() {
+				$("#edit_user").prop('disabled', true);
+				var oForm = {
+					"id" : $("#id").val(),
+					"roleId" : $("#use_role_id").val()
+				};
+				console.log(JSON.stringify(oForm));
+				$.ajax({
+					type : "post",
+					contentType : "application/json",
+					url : $("#user_form_edit").attr("action"),
+					data : JSON.stringify(oForm),
+					dataType : "json",
+					success : function(data) {
+						$("#edit_user").prop('disabled', false);
+						console.log(data);
+						if (data.errorList.length == 0) {
+							$.jGrowl("The record was successfully updated", {
+								header : 'Success!',
+								sticky : false,
+								life : 5000,
+								speed : 500,
+								theme : 'with-icon',
+								easing : 'easeOutBack',
+								animateOpen : {
+									height : "show"
+								},
+								animateClose : {
+									opacity : 'hide'
+								}
+							});
+						}
+					}
+				});
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>

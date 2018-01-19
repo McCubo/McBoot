@@ -94,9 +94,9 @@
 		<!-- aside item: Menu -->
 		<div class="sidebar-nav-fixed">
 			<ul class="menu" id="accordion-menu-js">
-				<li class="current"><a th:href="@{'/'}"><i class="icon-th"></i>
+				<li th:classappend="${isCatalog} ? current"><a th:href="@{'/'}"><i class="icon-th"></i>
 						Salesforce Catalogs</a></li>
-				<li sec:authorize="hasAuthority('ADMIN')" class=""><a href=""><i
+				<li th:classappend="${isUser} ? current" sec:authorize="hasAuthority('ADMIN')" class=""><a th:href="@{/admin/user_list}"><i
 						class="icon-user"></i>Admin Users</a></li>
 				<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}"><i
 						class="icon-off"></i>Sign Out</a></li>

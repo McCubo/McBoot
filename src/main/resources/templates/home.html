@@ -11,7 +11,7 @@
 		<header th:replace="fragments/header :: hlogo"></header>
 		<div id="main" role="main" class="container-fluid">
 			<div class="contained">
-				<aside th:replace="fragments/header :: aside"></aside>
+				<aside th:replace="fragments/header :: aside(isCatalog=true)"></aside>
 				<!-- main content -->
 				<div id="page-content">
 					<h1 id="page-header">Records ready to edition</h1>

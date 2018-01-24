@@ -4,7 +4,7 @@
 <meta charset="utf-8"></meta>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
 
-<title>Force.com Writeback</title>
+<title>TI Salesforce Program Detail Update</title>
 <meta name="description" content=""></meta>
 <meta name="author" content="McCubo"></meta>
 
@@ -73,7 +73,7 @@
 			<div id="logos">
 				<div id="logo"></div>
 			</div>
-			<h1 id="application_name">Salesforce Writeback</h1>
+			<h1 id="application_name">TI Salesforce Program Detail Update</h1>
 		</div>
 	</header>
 
@@ -94,10 +94,15 @@
 		<!-- aside item: Menu -->
 		<div class="sidebar-nav-fixed">
 			<ul class="menu" id="accordion-menu-js">
-				<li th:classappend="${isCatalog} ? current"><a th:href="@{'/'}"><i class="icon-th"></i>
-						Salesforce Catalogs</a></li>
-				<li th:classappend="${isUser} ? current" sec:authorize="hasAuthority('ADMIN')" class=""><a th:href="@{/admin/user_list}"><i
-						class="icon-user"></i>Admin Users</a></li>
+				<li th:classappend="${isCatalog} ? current"><a th:href="@{'/'}"><i
+						class="icon-th"></i> Salesforce Catalogs</a></li>
+				<li th:classappend="${isUser} ? current"
+					sec:authorize="hasAuthority('ADMIN')" class=""><a
+					th:href="@{/admin/user_list}"><i class="icon-user"></i>Admin
+						Users</a></li>
+				<li th:classappend="${isAudit} ? current"
+					sec:authorize="hasAuthority('ADMIN')" class=""><a
+					th:href="@{/admin/audit/report}"><i class="icon-random"></i>Changes List</a></li>
 				<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}"><i
 						class="icon-off"></i>Sign Out</a></li>
 			</ul>

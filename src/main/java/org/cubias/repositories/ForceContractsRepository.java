@@ -36,7 +36,7 @@ public class ForceContractsRepository {
 
 	@SuppressWarnings("unchecked")
 	public ArrayList<TI_Contracts__c> getall() {
-		String query = "SELECT Id, Name, Type_of_Work__c, Channel_Type__c, Team_Member_Headcount__c FROM TI_Contracts__c";
+		String query = "SELECT Id, Name, Type_of_Work__c, Channel_Type__c, Team_Member_Headcount__c, Program__c FROM TI_Contracts__c";
 		ArrayList<SObject> list = connection.query(query);
 		ArrayList<TI_Contracts__c> castedList = (ArrayList<TI_Contracts__c>) (List<?>) list;
 		return castedList;
@@ -44,7 +44,7 @@ public class ForceContractsRepository {
 
 	@SuppressWarnings("unchecked")
 	public TI_Contracts__c getById(String id) {
-		String query = "SELECT Id, Name, Type_of_Work__c, Channel_Type__c, Team_Member_Headcount__c FROM TI_Contracts__c WHERE Id = '"
+		String query = "SELECT Id, Name, Type_of_Work__c, Channel_Type__c, Team_Member_Headcount__c, Program__c FROM TI_Contracts__c WHERE Id = '"
 				+ id + "'";
 		ArrayList<SObject> list = connection.query(query);
 		ArrayList<TI_Contracts__c> castedList = (ArrayList<TI_Contracts__c>) (List<?>) list;
@@ -56,7 +56,7 @@ public class ForceContractsRepository {
 
 	@SuppressWarnings("unchecked")
 	public ContractPojo getPjoById(String id) {
-		String query = "SELECT Id, Name, Type_of_Work__c, Channel_Type__c, Team_Member_Headcount__c FROM TI_Contracts__c WHERE Id = '"
+		String query = "SELECT Id, Name, Type_of_Work__c, Channel_Type__c, Team_Member_Headcount__c, Program__c FROM TI_Contracts__c WHERE Id = '"
 				+ id + "'";
 		ArrayList<SObject> list = connection.query(query);
 		ArrayList<TI_Contracts__c> castedList = (ArrayList<TI_Contracts__c>) (List<?>) list;
@@ -69,6 +69,7 @@ public class ForceContractsRepository {
 					channelTypeOption, contract.getTeam_Member_Headcount__c());
 			pojo.setTypeOfWorkActiveOptions(contract.getType_of_Work__c());
 			pojo.setChannelTypeActiveOptions(contract.getChannel_Type__c());
+			pojo.setProgramName(contract.getProgram__c());
 			return pojo;
 		}
 		return null;

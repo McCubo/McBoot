@@ -14,13 +14,22 @@
 				<aside th:replace="fragments/header :: aside(isCatalog=true)"></aside>
 				<!-- main content -->
 				<div id="page-content">
-					<h1 id="page-header">
-						Editing TI Contract :: <strong th:text="${contract.id}"></strong>
-					</h1>
+					<h1 id="page-header">Editing TI Contract</h1>
 					<form class="form-horizontal themed"
 						th:action="@{/editor/save/contract}" id="contract_form_edit">
 						<fieldset>
 							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label>Program Name: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="text"
+											class="form-control" disabled="disabled"
+											th:value="${contract.ProgramName}"></input>
+									</div>
+								</div>
+								<br />
 								<div class="row">
 									<div class="col-md-3">
 										<label>TI Contract Name: </label>
@@ -61,7 +70,7 @@
 								<br />
 								<div class="row">
 									<div class="col-md-3">
-										<label>Channel Type: </label>
+										<label>Team member Total</label>
 									</div>
 									<div class="col-md-3">
 										<input type="number" id="tm_headcount"
@@ -109,37 +118,37 @@
 					dataType : "json",
 					success : function(data) {
 						$("#edit_contract").prop('disabled', false);
-						data.errorList.forEach(function(element){
-							$.jGrowl(element, { 
-								header: 'Error', 
-								sticky: false,
-								life: 5000,
-								speed: 500,
-								theme: 'with-icon',
-								easing: 'easeOutBack',
-								animateOpen: { 
-									height: "show"
+						data.errorList.forEach(function(element) {
+							$.jGrowl(element, {
+								header : 'Error',
+								sticky : false,
+								life : 5000,
+								speed : 500,
+								theme : 'with-icon',
+								easing : 'easeOutBack',
+								animateOpen : {
+									height : "show"
 								},
-								animateClose: { 
-									opacity: 'hide' 
+								animateClose : {
+									opacity : 'hide'
 								}
-							});	
+							});
 						});
 						if (data.errorList.length == 0) {
-							$.jGrowl("The record was successfully updated", { 
-								header: 'Success!', 
-								sticky: false,
-								life: 5000,
-								speed: 500,
-								theme: 'with-icon',
-								easing: 'easeOutBack',
-								animateOpen: { 
-									height: "show"
+							$.jGrowl("The record was successfully updated", {
+								header : 'Success!',
+								sticky : false,
+								life : 5000,
+								speed : 500,
+								theme : 'with-icon',
+								easing : 'easeOutBack',
+								animateOpen : {
+									height : "show"
 								},
-								animateClose: { 
-									opacity: 'hide' 
+								animateClose : {
+									opacity : 'hide'
 								}
-							});								
+							});
 						}
 					}
 				});

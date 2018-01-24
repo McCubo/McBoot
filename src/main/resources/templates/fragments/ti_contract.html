@@ -3,6 +3,20 @@
 <body>
 	<div th:fragment="table">
 		<style>
+.hovered tbody>tr:hover {
+	background-color: #8c68a6;
+	color: white;
+}
+
+.hovered tbody>tr:hover td.sorting_1 {
+	background-color: #49166d;
+	color: white;
+}
+
+.hovered tbody {
+	cursor: pointer;
+}
+
 tfoot input {
 	width: 100%;
 	padding: 3px;
@@ -13,31 +27,30 @@ tfoot {
 	display: table-header-group;
 }
 </style>
-		<table class="table table-striped table-bordered responsive"
-			id="ti_contract" aria-describedby="ti_contract_info">
+		<table class="table table-bordered responsive hovered" id="ti_contract"
+			aria-describedby="ti_contract_info">
 			<thead>
 				<tr>
-					<th>Contract ID</th>
+					<th>Program Name</th>
 					<th>Contract Name</th>
 					<th>Type(s) of Work</th>
 					<th>Channel(s) Type</th>
-					<th>Team Member Headcount</th>
+					<th>Team member total</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<th>Contract ID</th>
+					<th>Program Name</th>
 					<th>Contract Name</th>
 					<th>Type(s) of Work</th>
 					<th>Channel(s) Type</th>
-					<th>Team Member Headcount</th>
+					<th>Team member total</th>
 				</tr>
 			</tfoot>
 			<tbody>
-				<tr th:each="contract : ${contract_list}">
-					<td>
-					<a th:href="@{'/editor/' + ${contract.id} + '/contract'}" th:text="${contract.id}">Element ID</a>
-					</td>
+				<tr th:each="contract : ${contract_list}"
+					th:attr="data-href=@{'/editor/' + ${contract.id} + '/contract'}">
+					<td th:text="${contract.Program__c}"></td>
 					<td th:text="${contract.name}"></td>
 					<td th:text="${contract.Type_of_Work__c}"></td>
 					<td th:text="${contract.Channel_Type__c}"></td>
@@ -48,25 +61,47 @@ tfoot {
 		</table>
 	</div>
 	<script th:fragment="jscript">
-		$(document).ready(function() {
-			$('#ti_contract tfoot th').each(
-					function() {
-						var title = $(this).text();
-						$(this).html('<input type="text" placeholder="Search '+title+'" />');
-					});
-			var table = $('#ti_contract').DataTable({
-				"lengthChange" : false
-			});
-			table.columns().every(function() {
-				var that = this;
+		$(document)
+				.ready(
+						function() {
+							$('#ti_contract').on(
+									'click',
+									'tbody tr',
+									function() {
+										window.location.href = $(this).data(
+												'href');
+									});
 
-				$('input', this.footer()).on('keyup change', function() {
-					if (that.search() !== this.value) {
-						that.search(this.value).draw();
-					}
-				});
-			});
-		});
+							$('#ti_contract tfoot th')
+									.each(
+											function() {
+												var title = $(this).text();
+												$(this)
+														.html(
+																'<input type="text" placeholder="Search '+title+'" />');
+											});
+							var table = $('#ti_contract').DataTable({
+								"lengthChange" : false
+							});
+							table
+									.columns()
+									.every(
+											function() {
+												var that = this;
+												$('input', this.footer())
+														.on(
+																'keyup change',
+																function() {
+																	if (that
+																			.search() !== this.value) {
+																		that
+																				.search(
+																						this.value)
+																				.draw();
+																	}
+																});
+											});
+						});
 	</script>
 </body>
 </html>

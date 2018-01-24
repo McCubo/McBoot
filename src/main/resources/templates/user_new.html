@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/header :: css">
+
+</head>
+
+<body>
+	<!-- .height-wrapper -->
+	<div class="height-wrapper">
+		<!-- header -->
+		<header th:replace="fragments/header :: hlogo"></header>
+		<div id="main" role="main" class="container-fluid">
+			<div class="contained">
+				<aside th:replace="fragments/header :: aside(isUser=true)"></aside>
+				<!-- main content -->
+				<div id="page-content">
+					<h1 id="page-header">Adding a new application user</h1>
+					<form class="form-horizontal themed"
+						th:action="@{/admin/insert/user}" id="user_form_new" method="post">
+						<fieldset>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="ui-widget">
+											<div class="input-group">
+												<input style="height: 29px;" type="text"
+													class="form-control"
+													placeholder="Type Windows Login or Workday ID"
+													id="search_text"
+													data-th-attr="data-search_action=@{/admin/search/user}"></input>
+												<span class="input-group-addon" id="basic-addon1"><i
+													class="icon-search"></i></span>
+											</div>
+											<!-- /input-group -->
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-md-3">
+										<label>Workday ID: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="text" class="form-control" disabled="disabled"
+											id="wdid"></input>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<label>Windows Login: </label>
+									</div>
+									<div class="col-md-3">
+										<input type="text" class="form-control" disabled="disabled"
+											id="winlog"></input>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<label>Writeback Role: </label>
+									</div>
+									<div class="col-md-3">
+										<select id="use_role_id" class="form-control">
+											<option th:each="role : ${roleList}"
+												th:text="${#strings.capitalize(#strings.toLowerCase(role.rolName))}"
+												th:value="${role.rolId}"></option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<button type="reset" class="btn medium btn-danger">
+									Cancel</button>
+								<button type="submit" class="btn medium btn-primary"
+									id="new_user">Save changes</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<br />
+	<div th:replace="fragments/footer :: footer"></div>
+	<div th:replace="fragments/footer :: jscripts"></div>
+	<script>
+	var wdid = null;
+	var winLog = null;
+		$(document).ready(function() {
+			$("form#user_form_new").submit(function() {
+				$("#new_user").prop('disabled', true);
+				var oForm = {
+					"roleId" : $("#use_role_id").val(),
+					"wdId": wdid,
+					"adUser": winLog
+				};
+				console.log(JSON.stringify(oForm));
+				$.ajax({
+					type : "post",
+					contentType : "application/json",
+					url : $("#user_form_new").attr("action"),
+					data : JSON.stringify(oForm),
+					dataType : "json",
+					success : function(data) {
+						$("#new_user").prop('disabled', false);	
+						data.errorList.forEach(function(element){
+							$.jGrowl(element, {
+								header: 'Error', 
+								sticky: false,
+								life: 5000,
+								speed: 500,
+								theme: 'with-icon',
+								easing: 'easeOutBack',
+								animateOpen: { 
+									height: "show"
+								},
+								animateClose: { 
+									opacity: 'hide' 
+								}
+							});	
+						});
+						if (data.errorList.length == 0) {
+							wdid = null;
+							winLog = null;
+							$("#wdid").val("");
+							$("#winlog").val("");
+							$("#search_text").val("");
+							$.jGrowl("The record was successfully saved", {
+								header : 'Success!',
+								sticky : false,
+								life : 5000,
+								speed : 500,
+								theme : 'with-icon',
+								easing : 'easeOutBack',
+								animateOpen : {
+									height : "show"
+								},
+								animateClose : {
+									opacity : 'hide'
+								}
+							});
+						}
+					}
+				});
+				return false;
+			});
+			
+			$("#search_text").autocomplete({
+				source : function(request, response) {
+					$.ajax({
+						url : $("#search_text").attr("data-search_action"),
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							console.log(data);
+							response($.map(data, function(item) {
+								return {
+									value : item.value,
+									label : item.label,
+									winLogin : item.winLogin
+								}
+							}));
+						},
+						error : function(data, message, object) {
+							console.log(data);
+							console.log(message)
+							console.log(object)
+						}
+					});
+				},
+				minLength : 8,
+				messages : {
+					noResults : '',
+					results : function() {
+					}
+				},
+				select : function(event, ui) {
+					wdid = ui.item.value;
+					winLog = ui.item.winLogin;
+					$("#wdid").val(ui.item.value);
+					$("#winlog").val(ui.item.winLogin);
+				}
+			});
+		});
+	</script>
+</body>
+</html>

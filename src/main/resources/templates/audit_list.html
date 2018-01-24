@@ -10,26 +10,12 @@
 		<header th:replace="fragments/header :: hlogo"></header>
 		<div id="main" role="main" class="container-fluid">
 			<div class="contained">
-				<aside th:replace="fragments/header :: aside(isUser=true)"></aside>
+				<aside th:replace="fragments/header :: aside(isAudit=true)"></aside>
 				<!-- main content -->
 				<div id="page-content">
-					<h1 id="page-header">User Management List</h1>
+					<h1 id="page-header">Change log list</h1>
 					<div>
 						<style>
-.hovered tbody>tr:hover {
-	background-color: #8c68a6;
-	color: white;
-}
-
-.hovered tbody>tr:hover td.sorting_1 {
-	background-color: #49166d;
-	color: white;
-}
-
-.hovered tbody {
-	cursor: pointer;
-}
-
 tfoot input {
 	width: 100%;
 	padding: 3px;
@@ -40,37 +26,43 @@ tfoot {
 	display: table-header-group;
 }
 </style>
-						<table class="table hovered table-bordered responsive"
-							id="ti_user_table" aria-describedby="ti_user_table">
+						<table class="table table-striped table-bordered responsive"
+							id="ti_log_table" aria-describedby="ti_log_table">
 							<thead>
 								<tr>
-									<th>Windows Login</th>
-									<th>Workday ID</th>
-									<th>Role assigned</th>
-									<th>Inserted Date</th>
+									<th>Table</th>
+									<th>Field</th>
+									<th>Editor</th>
+									<th>Old Value</th>
+									<th>New Value</th>
+									<th>Event Date</th>
+									<th>Force.com ID</th>
 								</tr>
 							</thead>
 							<tfoot>
 								<tr>
-									<th>Windows Login</th>
-									<th>Workday ID</th>
-									<th>Role assigned</th>
-									<th>Inserted Date</th>
+									<th>Table</th>
+									<th>Field</th>
+									<th>Editor</th>
+									<th>Old Value</th>
+									<th>New Value</th>
+									<th>Event Date</th>
+									<th>Force.com ID</th>
 								</tr>
 							</tfoot>
 							<tbody>
-								<tr th:each="user : ${userList}"
-									th:attr="data-href=@{'/admin/'+${user.useId}+'/edit/user'}">
-									<td th:text="${user.useAdUser}"></td>
-									<td th:text="${user.useWdId}"></td>
-									<td
-										th:text="${#strings.capitalize(#strings.toLowerCase(user.useRole.rolName))}"></td>
-									<td th:text="${user.useInsertedDate}"></td>
+								<tr th:each="log : ${auditList}">
+									<td th:text="${log.audTableName}"></td>
+									<td th:text="${log.audFieldName}"></td>
+									<td th:text="${log.audUse.useAdUser}"></td>
+									<td th:text="${log.audOldValue}"></td>
+									<td th:text="${log.audNewValue}"></td>
+									<td th:text="${log.audEventDate}"></td>
+									<td th:text="${log.audRecordId}"></td>
 								</tr>
 							</tbody>
 						</table>
-						<a class="btn btn-info" th:href="@{/admin/new/user}" role="button">Add
-							new user.</a> <br /> <br />
+						<br /> <br />
 					</div>
 				</div>
 			</div>
@@ -84,14 +76,7 @@ tfoot {
 		$(document)
 				.ready(
 						function() {
-							$('table.hovered').on(
-									'click',
-									'tbody tr',
-									function() {
-										window.location.href = $(this).data(
-												'href');
-									});
-							$('#ti_user_table tfoot th')
+							$('#ti_log_table tfoot th')
 									.each(
 											function() {
 												var title = $(this).text();
@@ -100,10 +85,7 @@ tfoot {
 																'<input type="text" placeholder="Search '+title+'" />');
 											});
 
-							var table = $('#ti_user_table').DataTable({
-								"lengthChange" : false,
-								"pageLength" : 5
-							});
+							var table = $('#ti_log_table').DataTable({});
 							table
 									.columns()
 									.every(

@@ -11,6 +11,7 @@ public class ContractPojo {
 	private ArrayList<OptionPojo> typeOfWork = new ArrayList<>();
 	private ArrayList<OptionPojo> channelType = new ArrayList<>();
 	private Double teamMemberCount;
+	private String programName;
 
 	public ContractPojo(String id, String contactName, ArrayList<OptionPojo> typeOfWork,
 			ArrayList<OptionPojo> channelType, Double teamMemberCount) {
@@ -38,6 +39,14 @@ public class ContractPojo {
 				option.setSelected(true);
 			}
 		}
+	}
+
+	public String getProgramName() {
+		return programName;
+	}
+
+	public void setProgramName(String programName) {
+		this.programName = programName;
 	}
 
 	public String getId() {

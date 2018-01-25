@@ -3,6 +3,7 @@ package org.cubias.services;
 import java.util.ArrayList;
 
 import org.cubias.pojos.OptionPojo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sforce.soap.enterprise.Connector;
@@ -20,8 +21,12 @@ import com.sforce.ws.ConnectorConfig;
 @Service
 public class ForceEnterpriseConnection {
 
-	static final String USERNAME = "qlik.datasource@telusinternational.com.fulltest";
-	static final String PASSWORD = "4BJIQCNfbTVh9wxVvxKzBT50ITd85HvU8cJWdBBrOQd9pLYs7";
+	@Value("${force_user}")
+	private String USERNAME;
+	
+	@Value("${force_pwdtkn}")
+	private String PASSWORD;
+	
 	public static EnterpriseConnection connection;
 
 	public EnterpriseConnection getConnection() {
@@ -30,9 +35,6 @@ public class ForceEnterpriseConnection {
 		config.setPassword(PASSWORD);
 		try {
 			connection = Connector.newConnection(config);
-			System.out.println("Auth EndPoint: " + config.getAuthEndpoint());
-			System.out.println("Service EndPoint: " + config.getServiceEndpoint());
-			System.out.println("Username: " + config.getUsername());
 			System.out.println("SessionId: " + config.getSessionId());
 		} catch (ConnectionException e) {
 			e.printStackTrace();
